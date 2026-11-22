@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pythonlibs/
+.env
+.env.*
+!.env.example
+.agents/
+.local/
+.cache/
+.config/
+instance/
+*.db
+*.sqlite
+*.sqlite3
+/generated-artifacts/

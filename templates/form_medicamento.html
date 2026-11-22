@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4 shadow-sm">
+            <h2 class="mb-4 fw-bold">{{ 'Editar Remédio' if med else 'Novo Remédio' }}</h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nome do Medicamento</label>
+                    <input type="text" name="nome" class="form-control form-control-lg" value="{{ med.nome if med else '' }}" placeholder="Ex: Losartana 50mg" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Dose</label>
+                    <input type="text" name="dose" class="form-control form-control-lg" value="{{ med.dose if med else '' }}" placeholder="Ex: 1 comprimido" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Horário</label>
+                        <input type="time" name="horario" class="form-control form-control-lg" value="{{ med.horario if med else '' }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Turno</label>
+                        <select name="turno" class="form-select form-select-lg" required>
+                            {% for t in ['Manhã', 'Tarde', 'Noite'] %}
+                                <option value="{{ t }}" {{ 'selected' if med and med.turno == t else '' }}>{{ t }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Quantidade de Comprimidos na Caixa</label>
+                    <input type="number" name="estoque_atual" class="form-control form-control-lg" value="{{ med.estoque_atual if med else '30' }}" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100 btn-lg-custom mb-3">Guardar Medicamento</button>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary w-100 btn-lg">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

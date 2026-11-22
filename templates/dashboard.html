@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <h1 class="fw-bold m-0">Os Meus Remédios</h1>
+    <a href="{{ url_for('novo_medicamento') }}" class="btn btn-primary btn-lg-custom">+ Adicionar Remédio</a>
+</div>
+
+<!-- Filtros por Turno (Sprint 3) -->
+<div class="btn-group w-100 mb-4" role="group">
+    {% for turno in ['Todos', 'Manhã', 'Tarde', 'Noite'] %}
+        <a href="{{ url_for('dashboard', turno=turno) }}" 
+           class="btn btn-lg {{ 'btn-dark' if turno_atual == turno else 'btn-outline-dark' }} fw-bold">
+           {{ turno }}
+        </a>
+    {% endfor %}
+</div>
+
+<!-- Lista de Medicamentos Ordenada por Horário (Sprint 2) -->
+{% if medicamentos %}
+    <div class="row g-4">
+        {% for med in medicamentos %}
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm h-100 {{ 'border-danger border-3' if med.estoque_atual < 5 else '' }}">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-primary fs-4">⏰ {{ med.horario }}</span>
+                    <span class="badge bg-secondary fs-6">{{ med.turno }}</span>
+                </div>
+
+                <h2 class="fw-bold mt-2">{{ med.nome }}</h2>
+                <p class="mb-2"><strong>Dose:</strong> {{ med.dose }}</p>
+                <p class="mb-3"><strong>Estoque na caixa:</strong> {{ med.estoque_atual }} unidades</p>
+
+                <!-- Alerta Visual de Estoque Baixo (Sprint 4) -->
+                {% if med.estoque_atual < 5 %}
+                    <div class="alert alert-danger fw-bold fs-5">
+                        ⚠️ Estoque baixo! Restam apenas {{ med.estoque_atual }} comprimidos.
+                    </div>
+                {% endif %}
+
+                <!-- Botão Grande de Confirmação (Sprint 3) -->
+                <form action="{{ url_for('tomar_medicamento', id=med.id) }}" method="POST" class="mt-auto">
+                    <button type="submit" class="btn btn-success w-100 btn-lg-custom mb-3">
+                        ✅ CONFIRMAR DOSE TOMADA
+                    </button>
+                </form>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('editar_medicamento', id=med.id) }}" class="btn btn-outline-primary w-50 fw-bold">Editar</a>
+                    <form action="{{ url_for('excluir_medicamento', id=med.id) }}" method="POST" class="w-50" onsubmit="return confirm('Tem a certeza que deseja excluir este remédio?');">
+                        <button type="submit" class="btn btn-outline-danger w-100 fw-bold">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info fs-4 text-center p-4">
+        Nenhum medicamento registado para este filtro.
+    </div>
+{% endif %}
+
+<!-- Consulta de Doses Tomadas Hoje (Sprint 3) -->
+<div class="card p-4 mt-5 shadow-sm">
+    <h3 class="fw-bold mb-3">📋 Doses Tomadas Hoje</h3>
+    {% if historico_hoje %}
+        <ul class="list-group list-group-flush">
+            {% for item in historico_hoje %}
+                <li class="list-group-item fs-5">
+                    ✅ <strong>{{ item.medicamento.nome }}</strong> — tomado às {{ item.data_hora.strftime('%H:%M') }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted m-0">Nenhuma dose confirmada hoje.</p>
+    {% endif %}
+</div>
+{% endblock %}
