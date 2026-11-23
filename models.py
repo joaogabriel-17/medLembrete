@@ -15,10 +15,10 @@ class Medicamento(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     nome = db.Column(db.String(100), nullable=False)
-    dose = db.Column(db.String(50), nullable=False)        # Ex: "1 comprimido"
-    horario = db.Column(db.String(5), nullable=False)      # Formato "HH:MM" para ordenação
-    turno = db.Column(db.String(20), nullable=False)       # Manhã, Tarde ou Noite
-    estoque_atual = db.Column(db.Integer, nullable=False)  # Quantidade na caixa
+    dose = db.Column(db.String(50), nullable=False)        
+    horario = db.Column(db.String(5), nullable=False)      
+    turno = db.Column(db.String(20), nullable=False)       
+    estoque_atual = db.Column(db.Integer, nullable=False)  
     historico = db.relationship('HistoricoDose', backref='medicamento', lazy=True, cascade="all, delete-orphan")
 
 class HistoricoDose(db.Model):
