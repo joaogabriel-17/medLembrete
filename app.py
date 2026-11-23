@@ -22,11 +22,11 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Cria o banco de dados automaticamente na primeira execução
+
 with app.app_context():
     db.create_all()
 
-# --- SPRINT 1: Autenticação ---
+
 @app.route('/')
 def index():
     if current_user.is_authenticated:
@@ -74,7 +74,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# --- SPRINT 2 e 3: Tela Principal Ordenada e Filtro por Turno ---
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -84,10 +84,10 @@ def dashboard():
     if turno_filtro != 'Todos':
         query = query.filter_by(turno=turno_filtro)
 
-    # Ordenação cronológica pelo horário
+    
     medicamentos = query.order_by(Medicamento.horario.asc()).all()
 
-    # Doses tomadas hoje para consulta rápida
+    
     hoje = datetime.now().date()
     historico_hoje = [
         h for med in current_user.medicamentos 
@@ -101,7 +101,7 @@ def dashboard():
         historico_hoje=historico_hoje
     )
 
-# --- SPRINT 2: CRUD de Medicamentos ---
+
 @app.route('/medicamento/novo', methods=['GET', 'POST'])
 @login_required
 def novo_medicamento():
@@ -148,17 +148,16 @@ def excluir_medicamento(id):
         flash('Medicamento removido.', 'warning')
     return redirect(url_for('dashboard'))
 
-# --- SPRINT 3 e 4: Confirmar Dose e Baixa Automática de Estoque ---
+
 @app.route('/medicamento/tomar/<int:id>', methods=['POST'])
 @login_required
 def tomar_medicamento(id):
     med = Medicamento.query.get_or_404(id)
     if med.user_id == current_user.id:
-        # Regista a dose tomada (Sprint 3)
+        
         registro = HistoricoDose(medicamento_id=med.id)
         db.session.add(registro)
 
-        # Desconta 1 unidade do estoque automaticamente (Sprint 4)
         if med.estoque_atual > 0:
             med.estoque_atual -= 1
 

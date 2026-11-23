@@ -5,7 +5,7 @@
     <a href="{{ url_for('novo_medicamento') }}" class="btn btn-primary btn-lg-custom">+ Adicionar Remédio</a>
 </div>
 
-<!-- Filtros por Turno (Sprint 3) -->
+
 <div class="btn-group w-100 mb-4" role="group">
     {% for turno in ['Todos', 'Manhã', 'Tarde', 'Noite'] %}
         <a href="{{ url_for('dashboard', turno=turno) }}" 
@@ -15,7 +15,7 @@
     {% endfor %}
 </div>
 
-<!-- Lista de Medicamentos Ordenada por Horário (Sprint 2) -->
+
 {% if medicamentos %}
     <div class="row g-4">
         {% for med in medicamentos %}
@@ -30,14 +30,14 @@
                 <p class="mb-2"><strong>Dose:</strong> {{ med.dose }}</p>
                 <p class="mb-3"><strong>Estoque na caixa:</strong> {{ med.estoque_atual }} unidades</p>
 
-                <!-- Alerta Visual de Estoque Baixo (Sprint 4) -->
+                
                 {% if med.estoque_atual < 5 %}
                     <div class="alert alert-danger fw-bold fs-5">
                         ⚠️ Estoque baixo! Restam apenas {{ med.estoque_atual }} comprimidos.
                     </div>
                 {% endif %}
 
-                <!-- Botão Grande de Confirmação (Sprint 3) -->
+                
                 <form action="{{ url_for('tomar_medicamento', id=med.id) }}" method="POST" class="mt-auto">
                     <button type="submit" class="btn btn-success w-100 btn-lg-custom mb-3">
                         ✅ CONFIRMAR DOSE TOMADA
@@ -60,7 +60,7 @@
     </div>
 {% endif %}
 
-<!-- Consulta de Doses Tomadas Hoje (Sprint 3) -->
+
 <div class="card p-4 mt-5 shadow-sm">
     <h3 class="fw-bold mb-3">📋 Doses Tomadas Hoje</h3>
     {% if historico_hoje %}
