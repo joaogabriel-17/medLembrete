@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from datetime import datetime
+from time_utils import to_sao_paulo, utc_now_naive
 
 db = SQLAlchemy()
 
@@ -24,4 +24,8 @@ class Medicamento(db.Model):
 class HistoricoDose(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     medicamento_id = db.Column(db.Integer, db.ForeignKey('medicamento.id'), nullable=False)
-    data_hora = db.Column(db.DateTime, default=datetime.now)
+    data_hora = db.Column(db.DateTime, default=utc_now_naive)
+
+    @property
+    def data_hora_sao_paulo(self):
+        return to_sao_paulo(self.data_hora)

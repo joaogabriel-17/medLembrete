@@ -67,7 +67,7 @@
         <ul class="list-group list-group-flush">
             {% for item in historico_hoje %}
                 <li class="list-group-item fs-5">
-                    ✅ <strong>{{ item.medicamento.nome }}</strong> — tomado às {{ item.data_hora.strftime('%H:%M') }}
+                    ✅ <strong>{{ item.medicamento.nome }}</strong> — tomado às {{ item.data_hora_sao_paulo.strftime('%H:%M') }}
                 </li>
             {% endfor %}
         </ul>
