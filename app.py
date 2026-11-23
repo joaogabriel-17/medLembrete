@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Medicamento, HistoricoDose
-from datetime import datetime
+from time_utils import today_in_sao_paulo, to_sao_paulo
 import os
 
 app = Flask(__name__)
@@ -88,10 +88,10 @@ def dashboard():
     medicamentos = query.order_by(Medicamento.horario.asc()).all()
 
     
-    hoje = datetime.now().date()
+    hoje = today_in_sao_paulo()
     historico_hoje = [
         h for med in current_user.medicamentos 
-        for h in med.historico if h.data_hora.date() == hoje
+        for h in med.historico if to_sao_paulo(h.data_hora).date() == hoje
     ]
 
     return render_template(
